@@ -7,7 +7,9 @@ fn main() {
     let mut io = IoHandler::default();
 
     io.add_method("say_hello", |_param: Params| async {
-        Ok(serde_json::Value::String("Hello from JSON RPC.......".to_string()))
+        Ok(serde_json::Value::String(
+            "Hello from JSON RPC.......".to_string(),
+        ))
     });
 
     io.add_method("add", |param: Params| async {
@@ -31,4 +33,48 @@ fn main() {
     println!("The server is ready....");
 
     server.wait();
+}
+
+#[cfg(test)]
+mod test {
+
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Deserialize)]
+    struct Addresult {
+        jsonrpc: String,
+        result: u64,
+        id: u32,
+    }
+
+    #[derive(Serialize)]
+    struct AddRequest {
+        jsonrpc: String,
+        method: String,
+        params: Vec<u32>,
+        id: u32,
+    }
+
+    #[tokio::test]
+    async fn test_json_rpc_add() {
+        // since json in rust can be a struct we will use a struct
+        let request_body = AddRequest {
+            jsonrpc: "2.0".to_string(),
+            method: "add".to_string(),
+            params: vec![2, 3],
+            id: 1,
+        };
+
+        let response = reqwest::Client::new()
+            .post("http://localhost:3000")
+            .json(&request_body)
+            .send()
+            .await
+            .unwrap();
+
+        let body: Addresult = response.json().await.unwrap();
+        assert_eq!(body.result, 5);
+        assert_eq!(body.jsonrpc, "2.0".to_string());
+        assert_eq!(body.id, 1);
+    }
 }
