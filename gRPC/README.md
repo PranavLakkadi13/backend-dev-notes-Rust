@@ -8,3 +8,13 @@ gRPC supports multiple programming languages and provides features like authenti
 Protocol Buffers (Protobuf) is a language-agnostic, platform-neutral serialization format developed by Google for efficiently encoding structured data.  <br>
 It's used to define message schemas and services in .proto files, which are compiled into code for languages like Rust, Java, etc.  <br>
 In gRPC, it handles data serialization/deserialization for RPC calls, offering better performance and smaller payloads than JSON/XML. 
+
+
+# commands 
+```bash
+cargo run --quiet --bin grpc-client
+```
+
+```bash
+cargo run --quiet --bin grpc-server
+```
