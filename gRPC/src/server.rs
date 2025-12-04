@@ -7,7 +7,7 @@ use crate::helloworld::{
     greetings_server::{Greetings, GreetingsServer},
 };
 
-// using tonic to get the proto build files since build.rs when run generates the build file 
+// using tonic to get the proto build files since build.rs when run generates the build file
 pub mod helloworld {
     tonic::include_proto!("helloworld");
 }
