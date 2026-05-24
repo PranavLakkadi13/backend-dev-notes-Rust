@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  rust_app_instance_1:
+    build: ../
+    # image: app:latest-nginx
+    environment:
+      INSTANCE_NAME: "Server1"
+    ports: 
+      - "3000"
+
+  rust_app_instance_2:
+    build: ../
+    # image: app:latest-nginx
+    environment:
+      INSTANCE_NAME: "Server2"
+    ports: 
+      - "3001"
+
+  ngnix: 
+    image: nginx:latest
+    volumes: 
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports: 
+      - "80:80"
+    # this makes the ngnix server run only after the rust services are running... 
+    depends_on:
+      - rust_app_instance_1
+      - rust_app_instance_2
