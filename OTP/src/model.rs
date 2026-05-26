@@ -19,3 +19,11 @@ pub struct VerifyOtp {
 pub struct OTPVerifyResponse {
     pub status: String,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct DBSchema {
+    pub id: String,
+    pub email: String,
+    pub password: String,
+    pub phone: String,
+}
