@@ -1,0 +1,9 @@
+[package]
+name = "Smtp_protocol"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenvy = "0.15.7"
+lettre = "0.11.22"
+lettre_email = "0.9.4"
