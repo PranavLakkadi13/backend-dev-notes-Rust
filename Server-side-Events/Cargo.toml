@@ -1,0 +1,21 @@
+[package]
+name = "Server-side-Events"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.9"
+chrono = "0.4.45"
+futures = "0.3.32"
+reqwest = { version = "0.13.4", features = ["stream"] }
+tokio = { version = "1.52.3", features = ["full"] }
+tokio-stream = "0.1.18"
+
+[[bin]]
+name = "sse-server"
+path = "./src/server.rs"
+
+[[bin]]
+name = "sse-client"
+path = "./src/client.rs"
+
