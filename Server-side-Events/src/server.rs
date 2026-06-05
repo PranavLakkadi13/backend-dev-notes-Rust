@@ -25,6 +25,7 @@ async fn sse_handler() -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
     let stream = stream::repeat_with(|| Event::default().data(get_data()))
         .map(Ok)
         .throttle(Duration::from_secs(5));
+        // .take(6); This line is used when i want to kill the connection after n events
 
     // this is to keep the connection alive
     Sse::new(stream)

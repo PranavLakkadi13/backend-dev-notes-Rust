@@ -32,3 +32,17 @@ while let Some(chunk) = stream.try_next().await.unwrap() {
   No. The loop only exits when the stream is closed by the server (returns `None`).
 * **Does it block or spin/busy-wait?**
   No. The `.await` keyword suspends the execution of the task. It yields control back to the Tokio executor and registers the socket with the OS. It consumes **0% CPU** during the idle time. When the OS detects incoming data on the network card, Tokio wakes the task back up to process the new chunk.
+
+### Q3: How does the client know when the data stream has ended (e.g., in AI chat streams)?
+There are two ways this is handled:
+
+1. **At the Network Level (Connection Close)**:
+   * When the server is finished sending the response, it simply closes the HTTP connection. 
+   * On the client side, the socket receives an `EOF` (End of File). The async stream then returns `None`, which automatically breaks the `while let Some(...)` loop.
+
+2. **At the Protocol Level (Sentinel / Special Markers)**:
+   * Sometimes the HTTP connection is kept open so the client can receive *more* events later, but a specific task (like one AI bot response) is complete.
+   * In this case, the server sends a special **sentinel message** (a flag) down the stream to signal completion.
+   * For example, the OpenAI API streams chunks and sends a final message containing: `data: [DONE]`.
+   * When the client parses the string and detects `[DONE]`, the application logic knows the generation is complete and stops animating or closes the connection manually.
+
